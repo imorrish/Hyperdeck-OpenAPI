@@ -1,0 +1,713 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+      "title": "Blackmagic Hyperdeck Control API",
+      "version": "1.0.0",
+      "description": "API for controlling the System Modes on Blackmagic Design products"
+    },
+    "paths": {
+            "/transports/0": {
+              "get": {
+                "summary": "Get device’s basic transport status",
+                "responses": {
+                  "200": {
+                    "description": "Successful response",
+                    "content": {
+                      "application/json": {
+                        "example": {
+                          "mode": "InputPreview"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "put": {
+                "summary": "Set device’s basic transport status",
+                "parameters": [
+                  {
+                    "name": "mode",
+                    "in": "query",
+                    "description": "Transport mode. Possible values are: InputPreview, Output.",
+                    "required": true,
+                    "schema": {
+                      "type": "string",
+                      "enum": ["InputPreview", "Output"]
+                    }
+                  }
+                ],
+                "responses": {
+                  "204": {
+                    "description": "No Content"
+                  }
+                }
+              }
+            },
+            "/transports/0/stop": {
+              "get": {
+                "summary": "Determine if transport is stopped",
+                "responses": {
+                  "200": {
+                    "description": "Successful response",
+                    "content": {
+                      "application/json": {
+                        "example": {}
+                      }
+                    }
+                  }
+                }
+              },
+              "put": {
+                "summary": "Stop transport",
+                "responses": {
+                  "204": {
+                    "description": "No Content"
+                  }
+                }
+              }
+            },
+            "/transports/0/play": {
+              "get": {
+                "summary": "Determine if transport is playing",
+                "responses": {
+                  "200": {
+                    "description": "Successful response",
+                    "content": {
+                      "application/json": {
+                        "example": {}
+                      }
+                    }
+                  }
+                }
+              },
+              "put": {
+                "summary": "Start playing on transport",
+                "responses": {
+                  "204": {
+                    "description": "No Content"
+                  }
+                }
+              }
+            },      
+      "/transports/0/record": {
+        "get": {
+          "summary": "Get record state",
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {
+                  "example": {
+                    "recording": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+            "/transports/0/playback": {
+              "get": {
+                "summary": "Get playback state",
+                "responses": {
+                  "200": {
+                    "description": "Successful response",
+                    "content": {
+                      "application/json": {
+                        "example": {
+                          "type": "Play",
+                          "loop": true,
+                          "singleClip": false,
+                          "speed": 1.0,
+                          "position": 120
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "put": {
+                "summary": "Set playback state",
+                "parameters": [
+                  {
+                    "name": "type",
+                    "in": "query",
+                    "description": "Possible values are: Play, Jog, Shuttle, Var.",
+                    "required": true,
+                    "schema": {
+                      "type": "string",
+                      "enum": ["Play", "Jog", "Shuttle", "Var"]
+                    }
+                  },
+                  {
+                    "name": "loop",
+                    "in": "query",
+                    "description": "When true, playback loops from the end of the timeline to the beginning of the timeline",
+                    "required": true,
+                    "schema": {
+                      "type": "boolean"
+                    }
+                  },
+                  {
+                    "name": "singleClip",
+                    "in": "query",
+                    "description": "When true, playback loops from the end of the current clip to the beginning of the current clip",
+                    "required": true,
+                    "schema": {
+                      "type": "boolean"
+                    }
+                  },
+                  {
+                    "name": "speed",
+                    "in": "query",
+                    "description": "Playback Speed, 1.0 for normal forward playback",
+                    "required": true,
+                    "schema": {
+                      "type": "number"
+                    }
+                  },
+                  {
+                    "name": "position",
+                    "in": "query",
+                    "description": "Playback position on the timeline in units of video frames",
+                    "required": true,
+                    "schema": {
+                      "type": "integer"
+                    }
+                  }
+                ],
+                "responses": {
+                  "204": {
+                    "description": "No Content"
+                  }
+                }
+              }
+            },
+      "/system": {
+        "get": {
+          "summary": "Get device system information",
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {
+                  "example": {
+                    "codecFormat": {
+                      "codec": "H.264",
+                      "container": "MP4"
+                    },
+                    "videoFormat": {
+                      "name": "1080p",
+                      "frameRate": "29.97",
+                      "height": 1080,
+                      "width": 1920,
+                      "interlaced": false
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/system/supportedCodecFormats": {
+        "get": {
+          "summary": "Get the list of supported codecs",
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {
+                  "example": {
+                    "codecs": [
+                      {
+                        "codec": "H.264",
+                        "container": "MP4"
+                      },
+                      {
+                        "codec": "ProRes",
+                        "container": "MOV"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/system/codecFormat": {
+        "get": {
+          "summary": "Get the currently selected codec",
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {
+                  "example": {
+                    "codec": "H.265",
+                    "container": "MKV"
+                  }
+                }
+              }
+            }
+          }
+        },     
+        "put": {
+          "summary": "Set the codec",
+          "parameters": [
+            {
+              "name": "codec",
+              "in": "query",
+              "description": "Currently selected codec",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "container",
+              "in": "query",
+              "description": "Multimedia container format",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "No Content"
+            }
+          }
+        }
+      },
+      "/system/videoFormat": {
+        "put": {
+          "summary": "Set the video format",
+          "parameters": [
+            {
+              "name": "frameRate",
+              "in": "query",
+              "description": "Frame rate",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "enum": [
+                  "23.98",
+                  "24.00",
+                  "25.00",
+                  "29.97",
+                  "30.00",
+                  "47.95",
+                  "48.00",
+                  "50.00",
+                  "59.94",
+                  "60.00",
+                  "119.88",
+                  "120.00"
+                ]
+              }
+            },
+            {
+              "name": "height",
+              "in": "query",
+              "description": "Height dimension of video format",
+              "required": true,
+              "schema": {
+                "type": "number"
+              }
+            },
+            {
+              "name": "width",
+              "in": "query",
+              "description": "Width dimension of video format",
+              "required": true,
+              "schema": {
+                "type": "number"
+              }
+            },
+            {
+              "name": "interlaced",
+              "in": "query",
+              "description": "Is the display format interlaced?",
+              "required": true,
+              "schema": {
+                "type": "boolean"
+              }
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "No Content"
+            }
+          }
+        },
+        "get": {
+          "summary": "Get the currently selected video format",
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {
+                  "example": {
+                    "name": "1080p",
+                    "frameRate": "29.97",
+                    "height": 1080,
+                    "width": 1920,
+                    "interlaced": false
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/system/supportedVideoFormats": {
+        "get": {
+          "summary": "Get the list of supported video formats for the current system state",
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {
+                  "example": {
+                    "formats": [
+                      {
+                        "frameRate": "29.97",
+                        "height": 1080,
+                        "width": 1920,
+                        "interlaced": false
+                      },
+                      {
+                        "frameRate": "24.00",
+                        "height": 720,
+                        "width": 1280,
+                        "interlaced": true
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/media/workingset": {
+        "get": {
+          "summary": "Get the list of media devices in the working set",
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {
+                  "example": {
+                    "size": 10,
+                    "workingset": [
+                      {
+                        "index": 1,
+                        "activeDisk": true,
+                        "volume": "MediaVolume1",
+                        "deviceName": "Disk1",
+                        "remainingRecordTime": 3600,
+                        "totalSpace": 1000000000,
+                        "remainingSpace": 800000000,
+                        "clipCount": 5
+                      },
+                      {
+                        "index": 2,
+                        "activeDisk": false,
+                        "volume": "MediaVolume2",
+                        "deviceName": "Disk2",
+                        "remainingRecordTime": 1800,
+                        "totalSpace": 500000000,
+                        "remainingSpace": 300000000,
+                        "clipCount": 3
+                      }                      
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/media/active": {
+        "get": {
+          "summary": "Get the currently active media device",
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {
+                  "example": {
+                    "workingsetIndex": 1,
+                    "deviceName": "Disk1"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "put": {
+          "summary": "Set the currently active media device",
+          "parameters": [
+            {
+              "name": "workingsetIndex",
+              "in": "query",
+              "description": "Working set index of the media to become active",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "No Content"
+            }
+          }
+        }
+      },
+      "/media/devices/doformatSupportedFilesystems": {
+        "get": {
+          "summary": "Get the list of filesystems available to format the device",
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {
+                  "example": {
+                    "supportedFilesystems": [
+                      "FAT32",
+                      "exFAT",
+                      "NTFS"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/media/devices/{deviceName}": {
+        "get": {
+          "summary": "Get information about the selected device",
+          "parameters": [
+            {
+              "name": "deviceName",
+              "in": "path",
+              "description": "Internal device name of the media device",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {
+                  "example": {
+                    "state": "Mounted"                                     
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/media/devices/{deviceName}/doformat": {
+        "get": {
+          "summary": "Get a format key, used to format the device with a PUT request",
+          "parameters": [
+            {
+              "name": "deviceName",
+              "in": "path",
+              "description": "Internal device name of this media device",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {
+                  "example": {
+                    "deviceName": "Disk1",
+                    "key": "some-secret-key"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "put": {
+          "summary": "Perform a format of the media device",
+          "parameters": [
+            {
+              "name": "deviceName",
+              "in": "path",
+              "description": "Internal device name of this media device",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "key",
+              "in": "query",
+              "description": "The key used to format this device (fetched with GET request)",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "filesystem",
+              "in": "query",
+              "description": "Filesystem to format to (supportedFilesystems returns list of supported fileSystems)",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "volume",
+              "in": "query",
+              "description": "Volume name to set for the disk after format",
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "No Content"
+            }
+          }
+        }
+      },
+      "/timelines/0": {
+        "get": {
+          "summary": "Get the current playback timeline",
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {
+                  "example": {
+                    "clips": [
+                      {
+                        "clipUniqueId": 123,
+                        "frameCount": 1000
+                      },
+                      {
+                        "clipUniqueId": 124,
+                        "frameCount": 800
+                      }                      
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "delete": {
+          "summary": "Clear the current playback timeline",
+          "responses": {
+            "204": {
+              "description": "No Content"
+            }
+          }
+        }
+      },
+      "/timelines/0/add": {
+        "post": {
+          "summary": "Add a clip to the end of the timeline",
+          "parameters": [
+            {
+              "name": "clips",
+              "in": "query",
+              "description": "Unique ID used to identify this clip",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "No Content"
+            }
+          }
+        }
+      },
+      "/event/list": {
+        "get": {
+          "summary": "Get the list of events that can be subscribed to using the websocket API",
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {
+                  "example": {
+                    "events": [
+                      "Notification websocket - 1.0.0",
+                      "messages"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/event/subscribe": {
+        "post": {
+          "summary": "Subscribe to an event",
+          "parameters": [
+            {
+              "name": "event",
+              "in": "query",
+              "description": "Event name to subscribe to",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "No Content"
+            }
+          }
+        }
+      },
+      "/event/unsubscribe": {
+        "post": {
+          "summary": "Unsubscribe from an event",
+          "parameters": [
+            {
+              "name": "event",
+              "in": "query",
+              "description": "Event name to unsubscribe from",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "No Content"
+            }
+          }
+        }
+      }
+    }
+  }
